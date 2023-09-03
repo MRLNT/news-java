@@ -1,6 +1,7 @@
 package id.fazzbca.news.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,8 +10,7 @@ import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,24 +20,17 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "categories")
+public class Category {
     @Id
     @UuidGenerator
     private String id;
     
     @Column(length = 100, unique = true)
-    private String username;
+    private String name;
 
-    @Column(length = 100)
-    private String password;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
-
-    @Column(length = 100)
-    private String email;
+    @OneToMany(mappedBy = "category")
+    private List<Article> articles;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -47,10 +40,7 @@ public class User {
 
     private boolean isDeleted = false;
 
-    public User(String username, String password, Role role, String email) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.email = email;
+    public Category(String name) {
+        this.name = name;
     }
 }

@@ -20,24 +20,25 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "articles")
+public class Article {
     @Id
     @UuidGenerator
     private String id;
     
-    @Column(length = 100, unique = true)
-    private String username;
+    @Column(length = 500)
+    private String title;
 
-    @Column(length = 100)
-    private String password;
+    @Column(length = 2000)
+    private String content;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(length = 100)
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -47,10 +48,10 @@ public class User {
 
     private boolean isDeleted = false;
 
-    public User(String username, String password, Role role, String email) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.email = email;
+    public Article(String title, String content, User user, Category category) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+        this.category = category;
     }
 }

@@ -13,4 +13,7 @@ public interface UserService {
 
     // login
     ResponseEntity<?> getLoginByUsernameService(UserRequest request);
+
+    // update password
+    ResponseEntity<?> updatePasswordService(String id, UserRequest request);
 }

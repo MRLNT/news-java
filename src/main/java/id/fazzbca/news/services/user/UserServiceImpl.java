@@ -7,15 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import id.fazzbca.news.models.Role;
 import id.fazzbca.news.models.User;
 import id.fazzbca.news.payloads.req.UserRequest;
 import id.fazzbca.news.payloads.res.ResponseHandler;
+import id.fazzbca.news.repositories.RoleRepository;
 import id.fazzbca.news.repositories.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService{
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public ResponseEntity<?> addUserService(UserRequest request) {
@@ -30,8 +35,16 @@ public class UserServiceImpl implements UserService{
             throw new IllegalArgumentException("Username sudah ada");
         }
 
+        // dapatin role nya
+        Role role = roleRepository.findByName(request.getRole());
+        
+        // cek role
+        if (role == null) {
+            throw new IllegalArgumentException("Role tidak ditemukan");
+        }
+
         // simpan user baru
-        User newUser = new User(request.getUsername(), request.getPassword(), request.getRole(), request.getEmail());
+        User newUser = new User(request.getUsername(), request.getPassword(), role, request.getEmail());
         userRepository.save(newUser);
         return ResponseHandler.responseMessage(201, "User berhasil didaftarkan", true);
     }
@@ -57,5 +70,26 @@ public class UserServiceImpl implements UserService{
             throw new NoSuchElementException("password salah");
         }
         return ResponseHandler.responseMessage(200, "Login Berhasil", true);
+    }
+
+    @Override
+    public ResponseEntity<?> updatePasswordService(String id, UserRequest request) {
+        // find data by id
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            throw new NoSuchElementException("id tidak ditemukan");
+        });
+        // update pass
+        if (request.getUsername() != "") {
+            user.setUsername(request.getUsername());
+        }
+        if (request.getPassword() != "") {
+            user.setPassword(request.getPassword());
+        }
+
+        // save ke db
+        userRepository.save(user);
+
+        // return response
+        return ResponseHandler.responseMessage(200, "Ganti password berhasil", true);
     }
 }
