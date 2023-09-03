@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import id.fazzbca.news.payloads.req.ArticleRequest;
 import id.fazzbca.news.models.Article;
 import id.fazzbca.news.models.Category;
+import id.fazzbca.news.models.Role;
 import id.fazzbca.news.models.User;
 import id.fazzbca.news.payloads.res.ResponseHandler;
 import id.fazzbca.news.repositories.ArticleRepositories;
@@ -66,6 +67,7 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public ResponseEntity<?> getAllArticleService() {
         List<Article> articles = articleRepositories.findAll();
+        
         return ResponseHandler.responseData(200, "success", articles);
     }
 
@@ -77,6 +79,13 @@ public class ArticleServiceImpl implements ArticleService{
         });
 
         // Validasi role user
+        String username = request.getUser();
+        User user = userRepository.findByUsername(username);
+        Role userRole = user.getRole();
+        String roleName = userRole.getName();
+        if ("creator".equals(roleName)) {
+            throw new IllegalArgumentException("Creator tidak diizinkan untuk mengedit artikel");
+        }
 
         // update artikel
         if (request.getTitle() != "") {
@@ -90,7 +99,7 @@ public class ArticleServiceImpl implements ArticleService{
         articleRepositories.save(article);
 
         // return response
-        return ResponseHandler.responseMessage(200, "Ganti artikel berhasil", true);
+        return ResponseHandler.responseMessage(200, "Edit berhas, Role: " + roleName, true);
     }
 
     @Override
