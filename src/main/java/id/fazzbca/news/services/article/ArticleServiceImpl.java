@@ -1,6 +1,7 @@
 package id.fazzbca.news.services.article;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,12 @@ import org.springframework.stereotype.Service;
 import id.fazzbca.news.payloads.req.ArticleRequest;
 import id.fazzbca.news.models.Article;
 import id.fazzbca.news.models.Category;
+import id.fazzbca.news.models.Role;
 import id.fazzbca.news.models.User;
 import id.fazzbca.news.payloads.res.ResponseHandler;
 import id.fazzbca.news.repositories.ArticleRepositories;
 import id.fazzbca.news.repositories.CategoryRepository;
+import id.fazzbca.news.repositories.RoleRepository;
 import id.fazzbca.news.repositories.UserRepository;
 
 @Service
@@ -25,6 +28,9 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     @Override
     public ResponseEntity<?> addArticleService(ArticleRequest request) {
@@ -64,5 +70,29 @@ public class ArticleServiceImpl implements ArticleService{
         } catch (Exception e) {
             return ResponseHandler.responseError(500, e.getMessage(), null);
         }
+    }
+
+    @Override
+    public ResponseEntity<?> updateArticleService(String id, ArticleRequest request) {
+        // find data by id
+        Article article = articleRepositories.findById(id).orElseThrow(() -> {
+            throw new NoSuchElementException("id artikel tidak ditemukan");
+        });
+
+        // Validasi role user
+
+        // update artikel
+        if (request.getTitle() != "") {
+            article.setTitle(request.getTitle());
+        }
+        if (request.getContent() != "") {
+            article.setContent(request.getContent());
+        }
+
+        // save ke db
+        articleRepositories.save(article);
+
+        // return response
+        return ResponseHandler.responseMessage(200, "Ganti artikel berhasil", true);
     }
 }

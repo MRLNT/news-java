@@ -10,4 +10,7 @@ public interface ArticleService {
 
     // get all article
     ResponseEntity<?> getAllArticleService();
+
+    // update article
+    ResponseEntity<?> updateArticleService(String id, ArticleRequest request);
 }

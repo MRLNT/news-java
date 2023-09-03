@@ -1,7 +1,6 @@
 package id.fazzbca.news.models;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,7 +9,6 @@ import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,9 +26,6 @@ public class Category {
     
     @Column(length = 100, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "category")
-    private List<Article> articles;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
