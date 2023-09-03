@@ -40,6 +40,9 @@ public class Article {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(length = 2000)
+    private String comment;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -48,10 +51,11 @@ public class Article {
 
     private boolean isDeleted = false;
 
-    public Article(String title, String content, User user, Category category) {
+    public Article(String title, String content, User user, Category category, String comment) {
         this.title = title;
         this.content = content;
         this.user = user;
         this.category = category;
+        this.comment = comment;
     }
 }

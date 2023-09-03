@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import id.fazzbca.news.payloads.req.ArticleRequest;
 import id.fazzbca.news.models.Article;
 import id.fazzbca.news.models.Category;
-import id.fazzbca.news.models.Role;
 import id.fazzbca.news.models.User;
 import id.fazzbca.news.payloads.res.ResponseHandler;
 import id.fazzbca.news.repositories.ArticleRepositories;
@@ -36,12 +35,15 @@ public class ArticleServiceImpl implements ArticleService{
     public ResponseEntity<?> addArticleService(ArticleRequest request) {
         // dapetin user nya
         User user = userRepository.findByUsername(request.getUser());
+
         // cek user
         if (user == null) {
             throw new IllegalArgumentException("User tidak ditemukan");
         }
+
         // dapetin categori nya
         Category category = categoryRepository.findByName(request.getCategory());
+
         // cek categori
         if (category == null) {
             throw new IllegalArgumentException("Categori tidak ditemukan");
@@ -53,7 +55,7 @@ public class ArticleServiceImpl implements ArticleService{
         }
 
         // convert request menjadi model entity
-        Article article = new Article(request.getTitle(), request.getContent(), user, category);
+        Article article = new Article(request.getTitle(), request.getContent(), user, category, "");
 
         // simpan role
         articleRepositories.save(article);
@@ -63,13 +65,8 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ResponseEntity<?> getAllArticleService() {
-
-        try {
-            List<Article> articles = articleRepositories.findAll();
-            return ResponseHandler.responseData(200, "success", articles);
-        } catch (Exception e) {
-            return ResponseHandler.responseError(500, e.getMessage(), null);
-        }
+        List<Article> articles = articleRepositories.findAll();
+        return ResponseHandler.responseData(200, "success", articles);
     }
 
     @Override
@@ -95,4 +92,23 @@ public class ArticleServiceImpl implements ArticleService{
         // return response
         return ResponseHandler.responseMessage(200, "Ganti artikel berhasil", true);
     }
+
+    @Override
+    public ResponseEntity<?> commentArticleService(String id, ArticleRequest request) {
+        // find data by id
+        Article article = articleRepositories.findById(id).orElseThrow(() -> {
+            throw new NoSuchElementException("id artikel tidak ditemukan");
+        });
+
+        // Validasi role user
+        if (request.getComment() != "") {
+            article.setComment(request.getComment());
+        }
+        // save ke db
+        articleRepositories.save(article);
+
+        // return response
+        return ResponseHandler.responseMessage(200, "Comment artikel berhasil", true);
+    }
+    
 }

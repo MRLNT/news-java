@@ -15,4 +15,7 @@ public class ArticleRequest {
 
     @NotEmpty(message = "kategori harus di isi")
     private String category;
+    
+    @NotEmpty(message = "komentar harus di isi")
+    private String comment;
 }

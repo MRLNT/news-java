@@ -13,4 +13,7 @@ public interface ArticleService {
 
     // update article
     ResponseEntity<?> updateArticleService(String id, ArticleRequest request);
+
+    // update comment
+    ResponseEntity<?> commentArticleService(String id, ArticleRequest request);
 }
