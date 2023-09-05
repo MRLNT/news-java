@@ -34,6 +34,15 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ResponseEntity<?> addArticleService(ArticleRequest request) {
+        // Validasi role user biasa tidak bisa add article
+        String usernameRole = request.getUser();
+        User userRole = userRepository.findByUsername(usernameRole);
+        Role userRoleName = userRole.getRole();
+        String roleName = userRoleName.getName();
+        if ("user".equals(roleName)) {
+            throw new IllegalArgumentException("User tidak diizinkan untuk mengedit artikel");
+        }
+
         // dapetin user nya
         User user = userRepository.findByUsername(request.getUser());
 
@@ -99,7 +108,7 @@ public class ArticleServiceImpl implements ArticleService{
         articleRepositories.save(article);
 
         // return response
-        return ResponseHandler.responseMessage(200, "Edit berhas, Role: " + roleName, true);
+        return ResponseHandler.responseMessage(200, "Edit berhasil", true);
     }
 
     @Override

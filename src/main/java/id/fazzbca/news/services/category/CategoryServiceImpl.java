@@ -7,23 +7,45 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import id.fazzbca.news.models.Category;
+import id.fazzbca.news.models.Role;
+import id.fazzbca.news.models.User;
 import id.fazzbca.news.payloads.req.CategoryRequest;
 import id.fazzbca.news.payloads.res.ResponseHandler;
 import id.fazzbca.news.repositories.CategoryRepository;
+import id.fazzbca.news.repositories.UserRepository;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
     public ResponseEntity<?> addCategoryService(CategoryRequest request) {
+        // Validasi role user biasa tidak bisa add article
+        String usernameRole = request.getUser();
+        User userRole = userRepository.findByUsername(usernameRole);
+        Role userRoleName = userRole.getRole();
+        String roleName = userRoleName.getName();
+        if ("user".equals(roleName)) {
+            throw new IllegalArgumentException("User tidak diizinkan untuk mengedit artikel");
+        }
+
+        // dapetin user nya
+        User user = userRepository.findByUsername(request.getUser());
+        // cek user
+        if (user == null) {
+            throw new IllegalArgumentException("User tidak ditemukan");
+        }
+
         // cek inputan
         if (request.getName() == null || request.getName() == "") {
             throw new IllegalArgumentException("kategori dibutuhkan");
         }
         // convert request menjadi model entity
-        Category category = new Category(request.getName());
+        Category category = new Category(request.getName(), user);
 
         // simpan role
         categoryRepository.save(category);

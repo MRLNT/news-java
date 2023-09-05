@@ -6,4 +6,7 @@ import lombok.Data;
 public class CategoryRequest {
     @NotEmpty(message = "kategori harus di isi")
     private String name;
+
+    @NotEmpty(message = "user harus di isi")
+    private String user;
 }

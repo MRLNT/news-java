@@ -9,6 +9,8 @@ import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,10 @@ public class Category {
     @Column(length = 100, unique = true)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -35,7 +41,8 @@ public class Category {
 
     private boolean isDeleted = false;
 
-    public Category(String name) {
+    public Category(String name, User user) {
         this.name = name;
+        this.user = user;
     }
 }
