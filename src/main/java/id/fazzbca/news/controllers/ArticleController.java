@@ -37,4 +37,10 @@ public class ArticleController {
     public ResponseEntity<?> editArticle(@PathVariable(value = "id") String id, @RequestBody ArticleRequest request){
         return articleService.updateArticleService(id, request);
     }
+
+    // edit post
+    @PutMapping("/comment/{id}")
+    public ResponseEntity<?> commentArticle(@PathVariable(value = "id") String id, @RequestBody ArticleRequest request){
+        return articleService.commentArticleService(id, request);
+    }
 }
