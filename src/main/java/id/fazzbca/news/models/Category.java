@@ -41,8 +41,12 @@ public class Category {
 
     private boolean isDeleted = false;
 
-    public Category(String name, User user) {
+    // public Category(String name, User user) {
+    //     this.name = name;
+    //     this.user = user;
+    // }
+
+    public Category(String name) {
         this.name = name;
-        this.user = user;
     }
 }

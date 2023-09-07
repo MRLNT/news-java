@@ -17,7 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
+// tadi ke skip jadinya untuk role nya maish manual dari file
 public class SecurityConfig {
     @Autowired
     UserDetailsService userDetailsService;

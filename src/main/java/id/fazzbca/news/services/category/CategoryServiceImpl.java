@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import id.fazzbca.news.models.Category;
-import id.fazzbca.news.models.User;
+// import id.fazzbca.news.models.User;
 import id.fazzbca.news.payloads.req.CategoryRequest;
 import id.fazzbca.news.payloads.res.ResponseHandler;
 import id.fazzbca.news.repositories.CategoryRepository;
@@ -31,20 +31,21 @@ public class CategoryServiceImpl implements CategoryService{
         // if ("user".equals(roleName)) {
         //     throw new IllegalArgumentException("User tidak diizinkan untuk mengedit artikel");
         // }
-
+        // FIX THIS LATER
         // dapetin user nya
-        User user = userRepository.findByUsername(request.getUser());
-        // cek user
-        if (user == null) {
-            throw new IllegalArgumentException("User tidak ditemukan");
-        }
+        // User user = userRepository.findByUsername(request.getUser());
+        // // cek user
+        // if (user == null) {
+        //     throw new IllegalArgumentException("User tidak ditemukan");
+        // }
 
         // cek inputan
         if (request.getName() == null || request.getName() == "") {
             throw new IllegalArgumentException("kategori dibutuhkan");
         }
         // convert request menjadi model entity
-        Category category = new Category(request.getName(), user);
+        // Category category = new Category(request.getName(), user);
+        Category category = new Category(request.getName());
 
         // simpan role
         categoryRepository.save(category);
