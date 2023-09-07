@@ -43,7 +43,7 @@ public class SecurityConfig {
         // authorize request
         http.authorizeHttpRequests(auth ->{
             auth.requestMatchers("/").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/user/**").permitAll()
                 //.requestMatchers("/admin/**").hasRole("ADMIN")
                 //.requestMatchers("/guest/**").permitAll()
                 // .requestMatchers(HttpMethod.GET, "/books/**").hasRole("USER")
