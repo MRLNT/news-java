@@ -45,7 +45,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    private boolean isDeleted = false;
+    private Boolean isDeleted = false;
 
     public User(String username, String password, Role role, String email) {
         this.username = username;

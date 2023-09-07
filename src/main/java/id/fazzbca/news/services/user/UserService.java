@@ -16,4 +16,7 @@ public interface UserService {
 
     // update password
     ResponseEntity<?> updatePasswordService(String id, UserRequest request);
+
+    ResponseEntity<?> addUserServiceNoHash(UserRequest request);
+    ResponseEntity<?> getLoginByUsernameNoHashService(UserRequest request);
 }
