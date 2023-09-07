@@ -58,6 +58,4 @@ public class Article {
         this.category = category;
         this.comment = comment;
     }
-    //req create article input user id cek role = creator, category, role
-    // commet, save, exce
 }

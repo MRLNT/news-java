@@ -6,6 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,8 +22,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "save")
-public class Save {
+@Table(name = "comment")
+public class Comment {
     @Id
     @UuidGenerator
     private String id;
@@ -33,16 +35,22 @@ public class Save {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
+    
+    @JsonIgnore
     private boolean isDeleted = false;
 
-    public Save(Article article, String name) {
+    public Comment(Article article, String name, User user) {
         this.article = article;
         this.name = name;
+        this.user = user;
     }
 }

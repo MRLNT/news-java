@@ -3,20 +3,13 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
-public class SaveRequest {    
+public class CommentRequest {    
     @NotEmpty(message = "artikel harus di isi")
     private String article;
 
     @NotEmpty(message = "komentar harus di isi")
     private String name;
 
-    // Getter for 'article' field
-    public String getArticle() {
-        return article;
-    }
-
-    // Getter for 'name' field
-    public String getName() {
-        return name;
-    }
+    @NotEmpty(message = "user harus di isi")
+    private String user;
 }

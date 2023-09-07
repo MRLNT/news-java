@@ -1,4 +1,4 @@
-package id.fazzbca.news.services.save;
+package id.fazzbca.news.services.comment;
 
 import java.util.List;
 
@@ -7,16 +7,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import id.fazzbca.news.models.Article;
-import id.fazzbca.news.models.Save;
-import id.fazzbca.news.payloads.req.SaveRequest;
+import id.fazzbca.news.models.Comment;
+import id.fazzbca.news.models.User;
+import id.fazzbca.news.payloads.req.CommentRequest;
 import id.fazzbca.news.payloads.res.ResponseHandler;
 import id.fazzbca.news.repositories.ArticleRepositories;
 import id.fazzbca.news.repositories.RoleRepository;
-import id.fazzbca.news.repositories.SaveRepository;
+import id.fazzbca.news.repositories.CommentRepository;
 import id.fazzbca.news.repositories.UserRepository;
 
 @Service
-public class SaveServiceImpl implements SaveService{
+public class CommentServiceImpl implements CommentService{
     @Autowired
     UserRepository userRepository;
 
@@ -27,10 +28,10 @@ public class SaveServiceImpl implements SaveService{
     ArticleRepositories articleRepositories;
 
     @Autowired
-    SaveRepository saveRepository;
+    CommentRepository saveRepository;
 
     @Override
-    public ResponseEntity<?> addSaveArticleService(SaveRequest request) {
+    public ResponseEntity<?> addCommentArticleService(CommentRequest request) {
         // cek inputan
         if (request.getArticle() == null || request.getArticle().isEmpty()) {
             throw new IllegalArgumentException("artikel dibutuhkan");
@@ -38,23 +39,28 @@ public class SaveServiceImpl implements SaveService{
     
         // dapatin artikel
         Article article = articleRepositories.findByTitle(request.getArticle());
-        
         // cek artikel
         if (article == null) {
             throw new IllegalArgumentException("artikel tidak ditemukan");
         }
+        // dapetin user
+        User user = userRepository.findByUsername(request.getUser());
+        if (user == null) {
+            throw new IllegalArgumentException("user tidak ditemukan");
+        }
+
     
         // Simpan komentar pada artikel
-        Save save = new Save(article, request.getName()); // Assuming 'name' should be used as the comment
-        saveRepository.save(save);
+        Comment comment = new Comment(article, request.getName(), user); // Assuming 'name' should be used as the comment
+        saveRepository.save(comment);
     
         return ResponseHandler.responseMessage(201, "comment pada artikel berhasil didaftarkan", true);
     }
     
 
     @Override
-    public ResponseEntity<?> getAllSavedArticle() {
-        List<Save> saves = saveRepository.findAll();
+    public ResponseEntity<?> getAllCommentArticle() {
+        List<Comment> saves = saveRepository.findAll();
         return ResponseHandler.responseData(200, "success", saves);
     }
     
