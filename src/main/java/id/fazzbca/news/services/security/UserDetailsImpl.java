@@ -1,12 +1,15 @@
 package id.fazzbca.news.services.security;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import id.fazzbca.news.models.Role;
 import id.fazzbca.news.models.User;
 import lombok.AllArgsConstructor;
 
@@ -24,7 +27,15 @@ public class UserDetailsImpl implements UserDetails{
         * 
         * role hanya 1, bisa langsung ditambahkan rolenamenya
         */
-        List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("USER");
+        // List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("USER");
+
+        Set<Role> roles = user.getRoles();
+        Set<String> strRoles = new HashSet<>();
+        roles.forEach(role -> {
+        strRoles.add(role.getName());
+        });
+
+        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList(strRoles);
         return new UserDetailsImpl(authorities, user.getPassword(), user.getEmail(), user.getIsDeleted());
         
     }

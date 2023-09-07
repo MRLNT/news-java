@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import id.fazzbca.news.payloads.req.ArticleRequest;
 import id.fazzbca.news.models.Article;
 import id.fazzbca.news.models.Category;
-import id.fazzbca.news.models.Role;
 import id.fazzbca.news.models.User;
 import id.fazzbca.news.payloads.res.ResponseHandler;
 import id.fazzbca.news.repositories.ArticleRepositories;
@@ -34,14 +33,14 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ResponseEntity<?> addArticleService(ArticleRequest request) {
-        // Validasi role user biasa tidak bisa add article
-        String usernameRole = request.getUser();
-        User userRole = userRepository.findByUsername(usernameRole);
-        Role userRoleName = userRole.getRole();
-        String roleName = userRoleName.getName();
-        if ("user".equals(roleName)) {
-            throw new IllegalArgumentException("User tidak diizinkan untuk mengedit artikel");
-        }
+        // // Validasi role user biasa tidak bisa add article
+        // String usernameRole = request.getUser();
+        // User userRole = userRepository.findByUsername(usernameRole);
+        // Role userRoleName = userRole.getRole();
+        // String roleName = userRoleName.getName();
+        // if ("user".equals(roleName)) {
+        //     throw new IllegalArgumentException("User tidak diizinkan untuk mengedit artikel");
+        // }
 
         // dapetin user nya
         User user = userRepository.findByUsername(request.getUser());
@@ -87,14 +86,14 @@ public class ArticleServiceImpl implements ArticleService{
             throw new NoSuchElementException("id artikel tidak ditemukan");
         });
 
-        // Validasi role user
-        String username = request.getUser();
-        User user = userRepository.findByUsername(username);
-        Role userRole = user.getRole();
-        String roleName = userRole.getName();
-        if ("creator".equals(roleName)) {
-            throw new IllegalArgumentException("Creator tidak diizinkan untuk mengedit artikel");
-        }
+        // // Validasi role user
+        // String username = request.getUser();
+        // User user = userRepository.findByUsername(username);
+        // Role userRole = user.getRole();
+        // String roleName = userRole.getName();
+        // if ("creator".equals(roleName)) {
+        //     throw new IllegalArgumentException("Creator tidak diizinkan untuk mengedit artikel");
+        // }
 
         // update artikel
         if (request.getTitle() != "") {

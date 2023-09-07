@@ -1,9 +1,12 @@
 package id.fazzbca.news.services.user;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -40,59 +43,78 @@ public class UserServiceImpl implements UserService{
     JwtUtil jwtUtil;
 
     @Override
-    public ResponseEntity<?> addUserService(UserRequest request) {
-        // cek inputan
-        if (request.getUsername() == null || request.getUsername() == "") {
-            throw new IllegalArgumentException("username dibutuhkan");
-        }
+    public ResponseEntity<?> addUserService(UserRequest request, String role) {
+        // // cek inputan
+        // if (request.getUsername() == null || request.getUsername() == "") {
+        //     throw new IllegalArgumentException("username dibutuhkan");
+        // }
+        // // cek apakah username sudah ada
+        // User existingUser = userRepository.findByUsername(request.getUsername());
+        // if (existingUser != null) {
+        //     throw new IllegalArgumentException("Username sudah ada");
+        // }
+        // // dapatin role nya
+        // Role role = roleRepository.findByName(request.getRole());
+        // // cek role
+        // if (role == null) {
+        //     throw new IllegalArgumentException("Role tidak ditemukan");
+        // }
+        // // simpan user baru
+        // User newUser = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), role, request.getEmail());
+        // userRepository.save(newUser);
+        // return ResponseHandler.responseData(201, "User berhasil ditambahkan", newUser);
+        // //return ResponseHandler.responseMessage(201, "User berhasil didaftarkan", true);
 
-        // cek apakah username sudah ada
-        User existingUser = userRepository.findByUsername(request.getUsername());
-        if (existingUser != null) {
-            throw new IllegalArgumentException("Username sudah ada");
-        }
+        // check req.params role ada isinya atau tidak
+        String strRole = (role.equals("") || Objects.isNull(role) || role.equals(null)) ? "ROLE_USER" : role;
+        // check ke db role
+        Role roleUser = roleRepository.findByName(strRole);
 
-        // dapatin role nya
-        Role role = roleRepository.findByName(request.getRole());
-        
-        // cek role
-        if (role == null) {
-            throw new IllegalArgumentException("Role tidak ditemukan");
+        if (Objects.isNull(roleUser)) {
+            roleUser = new Role(strRole);
+            roleRepository.save(roleUser);
         }
+        // buatkan obj set role
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleUser);
 
-        // simpan user baru
-        User newUser = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), role, request.getEmail());
-        userRepository.save(newUser);
-        return ResponseHandler.responseData(201, "User berhasil ditambahkan", newUser);
-        //return ResponseHandler.responseMessage(201, "User berhasil didaftarkan", true);
+        User user = new User(request.getUsername(), passwordEncoder.encode(request.getPassword()), request.getEmail());
+
+        // set role nya
+        user.setRoles(roles);
+
+        userRepository.save(user);
+
+        return ResponseHandler.responseData(201, "User berhasil ditambhakan", user);
+
     }
 
-    @Override
-    public ResponseEntity<?> addUserServiceNoHash(UserRequest request) {
-        // cek inputan
-        if (request.getUsername() == null || request.getUsername() == "") {
-            throw new IllegalArgumentException("username dibutuhkan");
-        }
+    // @Override
+    // public ResponseEntity<?> addUserServiceNoHash(UserRequest request) {
+    //     // cek inputan
+    //     if (request.getUsername() == null || request.getUsername() == "") {
+    //         throw new IllegalArgumentException("username dibutuhkan");
+    //     }
 
-        // cek apakah username sudah ada
-        User existingUser = userRepository.findByUsername(request.getUsername());
-        if (existingUser != null) {
-            throw new IllegalArgumentException("Username sudah ada");
-        }
+    //     // cek apakah username sudah ada
+    //     User existingUser = userRepository.findByUsername(request.getUsername());
+    //     if (existingUser != null) {
+    //         throw new IllegalArgumentException("Username sudah ada");
+    //     }
 
-        // dapatin role nya
-        Role role = roleRepository.findByName(request.getRole());
+    //     // dapatin role nya
+    //     Role role = roleRepository.findByName(request.getRole());
         
-        // cek role
-        if (role == null) {
-            throw new IllegalArgumentException("Role tidak ditemukan");
-        }
+    //     // cek role
+    //     if (role == null) {
+    //         throw new IllegalArgumentException("Role tidak ditemukan");
+    //     }
 
-        // simpan user baru
-        User newUser = new User(request.getUsername(), request.getPassword(), role, request.getEmail());
-        userRepository.save(newUser);
-        return ResponseHandler.responseMessage(201, "User berhasil didaftarkan", true);
-    }
+    //     // simpan user baru
+    //     User newUser = new User(request.getUsername(), request.getPassword(), role, request.getEmail());
+    //     userRepository.save(newUser);
+    //     return ResponseHandler.responseMessage(201, "User berhasil didaftarkan", true);
+    // }
 
     @Override
     public ResponseEntity<?> getAllUsers() {

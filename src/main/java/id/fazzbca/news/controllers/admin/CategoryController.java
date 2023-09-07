@@ -1,4 +1,4 @@
-package id.fazzbca.news.controllers;
+package id.fazzbca.news.controllers.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import id.fazzbca.news.payloads.req.CategoryRequest;
 import id.fazzbca.news.services.category.CategoryService;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/admin/category")
 public class CategoryController {
     @Autowired
     CategoryService categoryService;

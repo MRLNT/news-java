@@ -6,7 +6,7 @@ import id.fazzbca.news.payloads.req.UserRequest;
 
 public interface UserService {
     // create user
-    ResponseEntity<?> addUserService(UserRequest request);
+    ResponseEntity<?> addUserService(UserRequest request, String role);
 
     // get all user
     ResponseEntity<?> getAllUsers();
@@ -17,6 +17,6 @@ public interface UserService {
     // update password
     ResponseEntity<?> updatePasswordService(String id, UserRequest request);
 
-    ResponseEntity<?> addUserServiceNoHash(UserRequest request);
+    //ResponseEntity<?> addUserServiceNoHash(UserRequest request);
     ResponseEntity<?> getLoginByUsernameNoHashService(UserRequest request);
 }

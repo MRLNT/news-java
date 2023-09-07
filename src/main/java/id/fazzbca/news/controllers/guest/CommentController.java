@@ -1,4 +1,4 @@
-package id.fazzbca.news.controllers;
+package id.fazzbca.news.controllers.guest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import id.fazzbca.news.payloads.req.CommentRequest;
 import id.fazzbca.news.services.comment.CommentService;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/guest/comment")
 public class CommentController {
     @Autowired
     CommentService saveService;
